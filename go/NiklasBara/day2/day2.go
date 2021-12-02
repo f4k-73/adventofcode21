@@ -72,16 +72,14 @@ func reduceToSumMapWithAim(lines []string) (map[string]int, error) {
 }
 
 func splitLine(line string) (string, int, error) {
-	split := strings.Split(line, " ")
+	split := strings.Split(strings.ReplaceAll(line,"\r",""), " ")
 	if len(split) != 2 {
 		return "", 0, fmt.Errorf("malformed entry should only have 2 data points")
 	}
-
 	number, err := strconv.ParseInt(split[1], 10, 64)
 	if err != nil {
 		return "", 0, err
 	}
-
 	return split[0], int(number), nil
 }
 
