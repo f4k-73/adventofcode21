@@ -1,17 +1,14 @@
 file = open('data/day1.txt', 'r')
+
 values = []
 for line in file.readlines():
-    values.append(line)
+    values.append(int(line))
 
-coordinates = {'forward':0, 'depth':0, 'aim':0}
-for value in values:
-    line = value.split(" ")
-    if 'forward' in line[0]:
-        coordinates['forward'] += int(line[1])
-        coordinates['depth'] += int(line[1]) * coordinates['aim']
-    elif 'down' in line[0]:
-        coordinates['aim'] += int(line[1])
-    elif 'up' in line[0]:
-        coordinates['aim'] -= int(line[1])
+counter = 0
+i = 3
+while i < len(values):
+    if values[i-3] < values [i]:
+        counter = counter + 1
+    i = i + 1
 
-print(coordinates['depth'] * coordinates['forward'])
+print(counter)
