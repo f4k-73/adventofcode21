@@ -5,3 +5,6 @@ If not you can look in the `Taskfile.yml` to see the commands you need to run ;)
 ## TODOs
 - [ ] extract cli arg parser into shared package
 - [ ] extrace file parser into shared package
+
+## Stars
+:star: :star: :star: :star:
