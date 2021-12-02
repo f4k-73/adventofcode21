@@ -4,6 +4,9 @@ version: '3'
 
 silent: true
 
+vars:
+  INPUT_DIR: ../../data/
+
 tasks:
   run:
     preconditions: 
@@ -15,7 +18,7 @@ tasks:
       - |
         cd {{.CLI_ARGS}}
         go build
-        ./main input.txt
+        ./main "../{{.INPUT_DIR}}{{.CLI_ARGS}}.txt"
 
   test:
     preconditions: 

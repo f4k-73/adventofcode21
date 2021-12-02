@@ -9,26 +9,26 @@ import (
 func main() {
 	inputPath, err := filePath()
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 		return
 	}
 
 	lines, err := linesOfFile(inputPath)
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 		return
 	}
 
 	xPos, depth, err := getCoords(lines)
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 		return
 	}
 	fmt.Printf("part01: %d\n" ,multiply(xPos, depth))
 
 	xPos, depth, err = getCoordsWithAim(lines)
 	if err != nil {
-		println(err)
+		fmt.Println(err)
 		return
 	}
 	fmt.Printf("part02: %d\n" ,multiply(xPos, depth))
