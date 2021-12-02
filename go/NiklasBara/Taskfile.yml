@@ -5,15 +5,17 @@ version: '3'
 vars:
   INPUT_DIR: ../../data/
 
+silent: true
+
 tasks:
   run:
     preconditions: 
     - sh: "[[ ! -z {{.CLI_ARGS}} ]] "
       msg: Please provide the dir of the day as cli arg (task create -- "PATH")
-    - sh: test -f "{{.CLI_ARGS}}main.go"
+    - sh: test -f "{{.CLI_ARGS}}/main.go"
       msg: "Please provide a path to a dir with a main.go as cli arg"
     cmds:
-      - echo qwe
+      - go run {{.CLI_ARGS}}/main.go {{.INPUT_DIR}}{{.CLI_ARGS}}.txt
   
   create:
     preconditions: 
