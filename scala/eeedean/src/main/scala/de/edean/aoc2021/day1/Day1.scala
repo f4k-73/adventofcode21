@@ -1,5 +1,7 @@
 package de.edean.aoc2021.day1
 
+import java.util.stream.IntStream
+import scala.collection.JavaConverters
 import scala.io.Source
 
 

@@ -6,8 +6,8 @@ object Day2 extends App {
 
   val INPUT_PATH = if (System.getProperty("os.name").startsWith("Mac") &&
                        System.getenv("USER").toLowerCase.equals("edean"))
-                              "src/main/resources/input1.txt"
-                         else "../../data/day1.txt"
+                              "src/main/resources/input2.txt"
+                         else "../../data/day2.txt"
 
   val input = Source.fromFile(INPUT_PATH, "UTF-8").getLines().toSeq
 
