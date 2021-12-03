@@ -20,6 +20,18 @@ tasks:
         go build
         ./main "../{{.INPUT_DIR}}{{.CLI_ARGS}}.txt"
 
+  run-local:
+    preconditions: 
+    - sh: "[[ ! -z {{.CLI_ARGS}} ]] "
+      msg: Please provide the dir of the day as cli arg (task create -- "PATH")
+    - sh: test -f "{{.CLI_ARGS}}/main.go"
+      msg: "Please provide a path to a dir with a main.go as cli arg"
+    cmds:
+      - |
+        cd {{.CLI_ARGS}}
+        go build
+        ./main "./input.txt"
+
   test:
     preconditions: 
     - sh: "[[ ! -z {{.CLI_ARGS}} ]] "
