@@ -61,11 +61,11 @@ object Day4 extends App {
     .filter(!_.isEmpty)
     .sliding(COLUMN_ROW_AMOUNT, COLUMN_ROW_AMOUNT)
     .map(_.map(_.split(" ").filter(!_.isEmpty).map(_.toInt).map((_, false)).toSeq))
-    .map(BingoBoard(_))
+    .map(BingoBoard(_)).toSeq
 
   println(numbersDrawn.mkString(", "))
   println("---")
-  def findWinner(boards:        Seq[BingoBoard] = bingoboards.toSeq,
+  def findWinner(boards:        Seq[BingoBoard] = bingoboards,
                  numbersDrawn:  Seq[Int]        = numbersDrawn,
                  currentNumber: Int             = numbersDrawn.head): BingoBoard = {
     val newBoards     = boards.map(_(currentNumber))
@@ -81,5 +81,23 @@ object Day4 extends App {
   println(wonBoard)
   println(wonBoard.score)
 
+  // --- part 2
+  println("---")
 
+  def findLoser(boards:        Seq[BingoBoard] = bingoboards,
+                numbersDrawn:  Seq[Int]        = numbersDrawn,
+                currentNumber: Int             = numbersDrawn.head): BingoBoard = {
+    val newBoards = boards.map(_ (currentNumber))
+    val winningBoards = newBoards.filter(_.hasWon)
+    if (newBoards.size == winningBoards.size) {
+      boards.filter(!_.hasWon).map(_ (currentNumber)).head
+    } else {
+      val remainingNumbers = numbersDrawn.drop(1)
+      findLoser(newBoards, remainingNumbers, remainingNumbers.head)
+    }
+  }
+
+  val loserBoard = findLoser()
+  println(loserBoard)
+  println(loserBoard.score)
 }
