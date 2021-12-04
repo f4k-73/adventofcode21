@@ -19,12 +19,19 @@ func main() {
 		return
 	}
 
-	xPos, depth, err := getGammaAndEpsilon(lines)
+	gamma, epsilon, err := getGammaAndEpsilon(lines)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("part01: %d\n" ,multiply(xPos, depth))
+	fmt.Printf("part01: %d\n" ,multiply(gamma, epsilon))
+
+	oxygen, co2, err := getOxygenAndCO2(lines)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("part02: %d\n" ,multiply(oxygen, co2))
 }
 
 func multiply(a int, b int) int {

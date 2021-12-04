@@ -26,6 +26,30 @@ func TestGammaAndEpsilon(t *testing.T) {
 	assertNil(t, gotErr)
 }
 
+func TestOxygenAndCO2(t *testing.T) {
+	input := []string{
+		"00100",
+		"11110",
+		"10110",
+		"10111",
+		"10101",
+		"01111",
+		"00111",
+		"11100",
+		"10000",
+		"11001",
+		"00010",
+		"01010",
+	}
+
+	gotGamma, gotEpsilon, gotErr := getOxygenAndCO2(input)
+	wantGamma, wantEpsilon := 23, 10
+
+	assertEqual(t, gotGamma, wantGamma)
+	assertEqual(t, gotEpsilon, wantEpsilon)
+	assertNil(t, gotErr)
+}
+
 
 func assertEqual(t *testing.T, got interface{}, want interface{}){
 	if got != want {
