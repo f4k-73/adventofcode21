@@ -19,7 +19,10 @@ func main() {
 		return
 	}
 
-	fmt.Printf("lines: %v\n", lines)
+	winningSum, lastNumber := winBingo(lines)
+	partOne := multiply(winningSum, lastNumber)
+	fmt.Printf("partOne: %v\n", partOne)
+
 }
 
 func multiply(a int, b int) int {

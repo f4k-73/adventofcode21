@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func TestGammaAndEpsilon(t *testing.T) {
+func TestWinBingo(t *testing.T) {
 	input := []string{
 		"7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1",
 		"",
@@ -25,12 +25,14 @@ func TestGammaAndEpsilon(t *testing.T) {
 		" 2  0 12  3  7",
 	}
 
-	gotGamma, gotEpsilon := bingo(input)
-	wantGamma, wantEpsilon := 188, 24
+	gotSum, gotNumber := winBingo(input)
+	wantSum, wantNumber := 188, 24
 
-	assertEqual(t, gotGamma, wantGamma)
-	assertEqual(t, gotEpsilon, wantEpsilon)
+	assertEqual(t, gotSum, wantSum )
+	assertEqual(t, gotNumber, wantNumber)
 }
+
+
 
 func assertEqual(t *testing.T, got interface{}, want interface{}){
 	if got != want {
