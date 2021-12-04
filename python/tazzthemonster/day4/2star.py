@@ -61,7 +61,7 @@ class Number:
         self.active = False
 
     def __repr__(self):
-        return str(self.number)
+        return str(self.number) + str(self.active)
 
     def win(self):
         self.active = True
@@ -88,7 +88,7 @@ bingoFields.append(Bingo(lines))
 
 for winningNumber in winningNumbers:
     for bingoField in bingoFields:
-        bingoField.winningNumber(winningNumber)
-        if bingoField.checkForWin():
-            print(bingoField.getScore(winningNumber))
-            exit(0)
+        if not bingoField.checkForWin():
+            bingoField.winningNumber(winningNumber)
+            if bingoField.checkForWin():
+                print(bingoField.getScore(winningNumber))
