@@ -9,7 +9,14 @@ import (
 
 func winBingo(lines []string) (int, int){
 	boards, numbers := parseInput(lines)
-	winningBoard, usedNumbers := playBingo(boards, numbers)
+	winningBoard, usedNumbers := playBingoUntilFirstWin(boards, numbers)
+	
+	return unmarkedSum(winningBoard), usedNumbers[len(usedNumbers) - 1]
+}
+
+func looseBingo(lines []string) (int, int){
+	boards, numbers := parseInput(lines)
+	winningBoard, usedNumbers := playBingoUntilLastBoardWin(boards, numbers)
 	
 	return unmarkedSum(winningBoard), usedNumbers[len(usedNumbers) - 1]
 }
@@ -29,7 +36,7 @@ func unmarkedSum(board board) int {
 	return sum
 }
 
-func playBingo(boards []board, numbers []int) (board, []int) {
+func playBingoUntilFirstWin(boards []board, numbers []int) (board, []int) {
 	usedNumbers := make([]int, 0)
 	for i, number := range numbers {
 		usedNumbers = append(usedNumbers, number)
@@ -42,6 +49,42 @@ func playBingo(boards []board, numbers []int) (board, []int) {
 	}
 
 	return board{}, usedNumbers
+}
+
+func playBingoUntilLastBoardWin(boards []board, numbers []int) (board, []int) {
+	boardsLeft := len(boards)
+	boadsDone := make([]int, 0)
+	usedNumbers := make([]int, 0)
+	
+	for i, number := range numbers {
+		usedNumbers = append(usedNumbers, number)
+
+		for j, board := range boards {
+			if contains(boadsDone, j){
+				continue
+			}
+			markBoard(board, number)
+			if hasWon(board.cells) {
+				boardsLeft --
+				boadsDone = append(boadsDone, j)
+				if boardsLeft == 0 {
+					return board, usedNumbers[:i + 1]
+				}
+			}
+		}
+	}
+
+	return board{}, usedNumbers
+}
+
+func contains(arr []int, number int) bool {
+
+	for _, v := range arr {
+		if v == number {
+			return true
+		}
+	}
+	return false
 }
 
 func markBoard(board board, number int) {

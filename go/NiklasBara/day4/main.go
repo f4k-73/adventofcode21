@@ -23,6 +23,10 @@ func main() {
 	partOne := multiply(winningSum, lastNumber)
 	fmt.Printf("partOne: %v\n", partOne)
 
+
+	loosingSum, lastNumber := looseBingo(lines)
+	partTwo := multiply(loosingSum, lastNumber)
+	fmt.Printf("partTwo: %v\n", partTwo)
 }
 
 func multiply(a int, b int) int {
