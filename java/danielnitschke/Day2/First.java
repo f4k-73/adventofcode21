@@ -1,4 +1,4 @@
-package Solutions.Year2021.Day2;
+package Day2;
 
 import java.util.List;
 import java.util.stream.Collectors;
