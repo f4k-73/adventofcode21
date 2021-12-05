@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets
 import scala.io.Source
 
 object Day5 extends App {
-  val INPUT_PATH = Inputs.test
+  val INPUT_PATH = Inputs.local
   val source = Source.fromFile(INPUT_PATH.toString, StandardCharsets.UTF_8.toString)
   val lines = source.getLines().toSeq
   source.close()
@@ -14,14 +14,13 @@ object Day5 extends App {
         Point(ints.head, ints.last)
       })
   )
-/*
+
   val pointByCount = inputs.map(Line(_).fillIn()).flatMap(_.points)
     .groupMapReduce(identity)(_ => 1)(_ + _)
   val res = pointByCount.count(_._2 >= 2)
 
   printBoard(pointByCount, 10)
   println(s"Part1: $res")
-*/
 
   val diagPointByCount = inputs.map(Line(_).fillInWithDiagonals()).flatMap(_.points)
     .groupMapReduce(identity)(_ => 1)(_ + _)
