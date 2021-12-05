@@ -1,0 +1,57 @@
+# https://taskfile.dev
+
+version: '3'
+
+silent: true
+
+vars:
+  INPUT_DIR: ../../data/
+
+tasks:
+  run:
+    preconditions: 
+    - sh: "[[ ! -z {{.CLI_ARGS}} ]] "
+      msg: Please provide the dir of the day as cli arg (task create -- "PATH")
+    - sh: test -f "{{.CLI_ARGS}}/main.go"
+      msg: "Please provide a path to a dir with a main.go as cli arg"
+    cmds:
+      - |
+        cd {{.CLI_ARGS}}
+        go build
+        ./main "../{{.INPUT_DIR}}{{.CLI_ARGS}}.txt"
+
+  run-local:
+    preconditions: 
+    - sh: "[[ ! -z {{.CLI_ARGS}} ]] "
+      msg: Please provide the dir of the day as cli arg (task create -- "PATH")
+    - sh: test -f "{{.CLI_ARGS}}/main.go"
+      msg: "Please provide a path to a dir with a main.go as cli arg"
+    cmds:
+      - |
+        cd {{.CLI_ARGS}}
+        go build
+        ./main "./input.txt"
+
+  test:
+    preconditions: 
+    - sh: "[[ ! -z {{.CLI_ARGS}} ]] "
+      msg: Please provide the dir of the day as cli arg (task create -- "PATH")
+    - sh: test -f "{{.CLI_ARGS}}/main.go"
+      msg: "Please provide a path to a dir with a main.go as cli arg"
+    cmds:
+      - |
+        cd {{.CLI_ARGS}}
+        go test *.go
+
+  create:
+    preconditions: 
+    - sh: "[[ ! -z {{.CLI_ARGS}} ]] "
+      msg: Please provide the the day as cli arg (task create -- "DAY")
+    cmds:
+      - mkdir {{.CLI_ARGS}}
+      - |
+        cd {{.CLI_ARGS}}
+        go mod init main
+        touch main.go
+        touch {{.CLI_ARGS}}.go
+        touch {{.CLI_ARGS}}_test.go
