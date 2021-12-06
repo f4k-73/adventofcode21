@@ -45,37 +45,11 @@ object Day5 extends App {
   }
 
   case class Point(x: Int, y: Int) {
-    // Defining canEqual method
-    def canEqual(a: Any) = a.isInstanceOf[Point]
-
-    // Defining equals method with override keyword
-    override def equals(that: Any): Boolean =
-      that match
-      {
-        case that: Point => that.canEqual(this) &&
-          this.hashCode == that.hashCode
-        case _ => false
-      }
-
-    // Defining hashcode method
-    override def hashCode: Int = {
-      val prime = 31
-      var result = 1
-      result = prime * result + x;
-      result = prime * result +
-        (if (y == null) 0 else y.hashCode)
-      return result
-    }
   }
 
   case class Line(points: Seq[Point]) {
 
     private def inBetween(points: Seq[Point]) : Seq[Point] = {
-      if(points.head == points.last){
-        println(points.head, points.last)
-      }
-
-
       if (points.head.x == points.last.x) {
         rangeBetween(points.map(_.y).sorted).map(Point(points.head.x, _))
       } else if (points.head.y == points.last.y){
