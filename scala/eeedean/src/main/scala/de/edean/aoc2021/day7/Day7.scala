@@ -25,8 +25,8 @@ object Day7 extends App {
   (0 to middleIndex by 1).foreach(_ => print("-----"))
   println("-⤴️")
 
-  def fuelConsumption(n: Int, npp: Int = 0): Int = {
-    if(n>1) n + fuelConsumption(n-1) else n
+  def fuelConsumption(n: Int): Int = {
+    n * (n + 1) / 2
   }
 
   def findOptimum(positions: Seq[Int], target: Int): Int = {
