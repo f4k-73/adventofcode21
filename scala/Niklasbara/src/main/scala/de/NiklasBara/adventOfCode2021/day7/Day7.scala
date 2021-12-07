@@ -12,22 +12,36 @@ object Day7 extends App {
 
   private val analyzer: CrabAnalyzer = CrabAnalyzer(inputs)
 
-  println(s"part1 ${analyzer.moveLeast()}")
+  println(s"part1 ${analyzer.moveLeast(true)}")
+  println(s"part1 ${analyzer.moveLeast(false)}")
 }
 
 case class CrabAnalyzer(crabToPos: Map[Int, Int]) {
 
-  def moveLeast(): Int = {
+  def moveLeast(staticFuelCosts: Boolean): Int = {
     val positions = crabToPos.keys.min to crabToPos.keys.max
-    positions.map(fuelToMoveCrabsIntoPos(crabToPos, _)).min
+    positions.map(fuelToMoveCrabsIntoPos(crabToPos, _, staticFuelCosts)).min
   }
 
-  private def fuelToMoveCrabsIntoPos(crabs: Map[Int, Int], position: Int): Int = {
-    crabs.map(fuelToMoveCrabIntoPos(_, position)).sum
+  private def fuelToMoveCrabsIntoPos(crabs: Map[Int, Int], position: Int, staticFuelCosts: Boolean): Int = {
+    crabs.map(
+      if (staticFuelCosts)
+        fuelToMoveCrabIntoPos(_, position)
+      else
+        fuelToMoveCrabIntoPosWithGrowingFuelCosts(_, position)
+    ).sum
   }
 
   private def fuelToMoveCrabIntoPos(crab: (Int, Int), position: Int): Int = {
     Math.abs(crab._1 - position) * crab._2
+  }
+
+  private def fuelToMoveCrabIntoPosWithGrowingFuelCosts(crab: (Int, Int), position: Int): Int = {
+    fuelCosts(Math.abs(crab._1 - position)) * crab._2
+  }
+
+  private def fuelCosts(n: Int): Int = {
+    n * (n + 1) / 2
   }
 
 }
