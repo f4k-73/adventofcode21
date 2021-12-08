@@ -11,7 +11,12 @@ object Day8 extends App {
   source.close()
   val inputsToOutputs = lines.map(_.split(" \\| ")).map(arr => arr(0) -> arr(1)).toMap
 
-  val uniques = Map((2, "1"), (4, "4"), (3, "7"), (7, "8"))
+  val uniqueSegmentLookup = Map(
+    (2, "1"),
+    (4, "4"),
+    (3, "7"),
+    (7, "8")
+  )
 
   val fiveSegmentLookups = Map(
     ((2, 3), "3"),
@@ -32,7 +37,7 @@ object Day8 extends App {
 
   val countOfUniques = inputsToOutputs.values.map(_.trim)
     .flatMap(_.split(" ")).map(_.length)
-    .count(uniques.keys.toSet.contains(_))
+    .count(uniqueSegmentLookup.keys.toSet.contains(_))
   println("part1:", countOfUniques)
 
   val decoded = inputsToOutputs.map(decodeSevenSegment).sum
@@ -48,7 +53,7 @@ object Day8 extends App {
     val oneSegments = (keyNumbers ++ valueNumbers).find(s => s.length == 2).get
     val fourSegments = (keyNumbers ++ valueNumbers).find(s => s.length == 4).get
 
-    valueNumbers.map(numberString => uniques.getOrRun(
+    valueNumbers.map(numberString => uniqueSegmentLookup.getOrRun(
       numberString.length, () =>
         segmentLookupTable(numberString.length)(
           numberString.intersect(oneSegments).length,
