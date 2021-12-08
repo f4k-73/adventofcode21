@@ -50,8 +50,8 @@ object Day8 extends App {
     val keyNumbers = keyValue._1.split(" ")
     val valueNumbers = keyValue._2.split(" ")
 
-    val oneSegments = (keyNumbers ++ valueNumbers).find(s => s.length == 2).get
-    val fourSegments = (keyNumbers ++ valueNumbers).find(s => s.length == 4).get
+    val oneSegments = (keyNumbers ++ valueNumbers).find(_.length == 2).get
+    val fourSegments = (keyNumbers ++ valueNumbers).find(_.length == 4).get
 
     valueNumbers.map(numberString => uniqueSegmentLookup.getOrRun(
       numberString.length, () =>
