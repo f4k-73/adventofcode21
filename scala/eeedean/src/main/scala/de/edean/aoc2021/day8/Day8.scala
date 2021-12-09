@@ -38,7 +38,7 @@ object Day8 extends App {
   implicit def decodableIntConversion(n: Int) = DecodableInt(n)
 
 
-  println(riddles.map({ case (uniqueCombinations, writtenOutput) => {
+  println(riddles.map({ case (uniqueCombinations, writtenOutput) =>
     def findSegments(remaining: Seq[String], taken: Map[Int, Int] = Map()): Map[Int, Int] = {
       if (remaining.exists(_.size.equals(2))) {
         val easySegments = Map(
@@ -48,17 +48,38 @@ object Day8 extends App {
           8 -> remaining.filter(_.size.equals(7)).head.encode
         )
         findSegments(remaining.filterNot(seg => easySegments.values.exists(_.equals(seg.encode))), taken ++ easySegments)
+      } else if (!taken.exists({ case (key, _) => key.equals(3) })) {
+        val foundSegments = Map(
+          3 -> remaining.filter(str => str.size.equals(5) && (str.encode & taken.get(7).get) == taken.get(7).get).head.encode,
+          9 -> remaining.filter(str => str.size.equals(6) && (str.encode & taken.get(4).get) == taken.get(4).get).head.encode
+        )
+        findSegments(remaining.filterNot(seg => foundSegments.values.exists(_.equals(seg.encode))), taken ++ foundSegments)
+      } else if (!taken.exists({ case (key, _) => key.equals(0) })) {
+        val foundSegments = Map(
+          0 -> remaining.filter(str => str.size.equals(6) && (str.encode & taken.get(7).get) == taken.get(7).get).head.encode
+        )
+        findSegments(remaining.filterNot(seg => foundSegments.values.exists(_.equals(seg.encode))), taken ++ foundSegments)
+      } else if (!taken.exists({ case (key, _) => key.equals(6) })) {
+        val foundSegments = Map(
+          6 -> remaining.filter(_.size.equals(6)).head.encode
+        )
+        findSegments(remaining.filterNot(seg => foundSegments.values.exists(_.equals(seg.encode))), taken ++ foundSegments)
+      } else if (!taken.exists({ case (key, _) => key.equals(5) })) {
+        val topRightSegment = taken.get(8).get ^ taken.get(6).get
+        val foundSegments = Map(
+          5 -> remaining.filter(str => str.size.equals(5) && (topRightSegment & str.encode) == 0).head.encode,
+          2 -> remaining.filter(str => str.size.equals(5) && (topRightSegment & str.encode) == topRightSegment).head.encode
+        )
+        findSegments(remaining.filterNot(seg => foundSegments.values.exists(_.equals(seg.encode))), taken ++ foundSegments)
       } else {
         taken
       }
     }
-    val easySegments = findSegments(uniqueCombinations)
-    val digitsToSegments = easySegments
-    println(s"${uniqueCombinations.mkString(" ")} |\n${writtenOutput.mkString(" ")}")
-    println(digitsToSegments.map({case (key, value) => (key, value.decode)}))
 
-    val foundValues = writtenOutput.map(_.encode).filter(segments => digitsToSegments.values.exists(_.equals(segments)))
-    println(foundValues.map(n => digitsToSegments.toSeq.filter({ case (_, value) => value.equals(n)}).head._1))
-    foundValues.size
-  }}).sum)
+    val digitsToSegments = findSegments(uniqueCombinations)
+    println(s"${uniqueCombinations.mkString(" ")} |\n${writtenOutput.mkString(" ")}")
+    println(digitsToSegments.map({ case (key, value) => (key, value.decode) }))
+    val segmentsToDigits = digitsToSegments.toSeq.map({ case (key, value) => (value, key) }).toMap
+    writtenOutput.map(seg => segmentsToDigits(seg.encode)).mkString.toInt
+  }).sum)
 }
