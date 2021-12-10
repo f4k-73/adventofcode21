@@ -16,6 +16,7 @@ object Day9 extends App {
 
 
   println("part1:", value.lowPoints().map(_._1 + 1).sum)
+  println("part2:", value.basins().map(_.size).sorted.takeRight(3).reduce(Math.multiplyExact))
 
 
   implicit class Better2dSeq(val s: Seq[Seq[Int]]) {
@@ -25,21 +26,36 @@ object Day9 extends App {
       } else if (y > s.length - 1 || x > s(y).length - 1) {
         (Int.MaxValue, y, x)
       } else {
-        (s(y)(x), y, x)
+        (s.get(y, x), y, x)
       }
     }
 
-    def getNeighbour(y: Int, x: Int, offset: (Int, Int)) = getCell(y + offset._1, x + offset._2)
+    def basins(): Seq[Seq[(Int, Int, Int)]] = {
+      lowPoints().map(c => grow(c).toSeq)
+    }
 
-    def isLowPoint(y: Int, x: Int) = offsets.map(getNeighbour(y, x, _)).map(_._1).forall(_ > getCell(y, x)._1)
+    def grow(cell: (Int, Int, Int)): Set[(Int, Int, Int)] = {
+      val higherNeighbours = offsets.map(getNeighbour(cell._2, cell._3, _))
+        .filter(_._1 < 9)
+        .filter(_._1 > cell._1)
+      if (higherNeighbours.isEmpty) {
+        Set(cell)
+      } else {
+        higherNeighbours.flatMap(grow).appended(cell).toSet
+      }
+    }
 
-    def lowPoints() = s.zipWithIndex
+    def getNeighbour(y: Int, x: Int, offset: (Int, Int)): (Int, Int, Int) = getCell(y + offset._1, x + offset._2)
+
+    def isLowPoint(y: Int, x: Int): Boolean = offsets.map(getNeighbour(y, x, _)).map(_._1).forall(_ > getCell(y, x)._1)
+
+    def lowPoints(): Seq[(Int, Int, Int)] = s.zipWithIndex
       .flatMap(lineAndIndex => lineAndIndex._1.zipWithIndex
         .filter(cellAndIndex => isLowPoint(lineAndIndex._2, cellAndIndex._2))
         .map(cellAndIndex => (cellAndIndex._1, lineAndIndex._2, cellAndIndex._2))
       )
 
-    def get(y: Int, x: Int) = s(y)(x)
+    def get(y: Int, x: Int): Int = s(y)(x)
   }
 }
 
