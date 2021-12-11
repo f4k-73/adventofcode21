@@ -1,32 +1,33 @@
-class Fish:
+fishes = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
 
-    def __init__(self, timer=8):
-        self.timer = timer
+def addFish(timer: int, fishes, number=1):
+    fishes[timer] = fishes[timer] + number
 
-    def __repr__(self):
-        return str(self.timer)
-
-    def spawn(self):
-        if self.timer <= 0:
-            self.timer = 6
-            return Fish()
-        else:
-            self.timer -= 1
+def time(fishes):
+    return {
+        0: fishes[1],
+        1: fishes[2],
+        2: fishes[3],
+        3: fishes[4],
+        4: fishes[5],
+        5: fishes[6],
+        6: fishes[7] + fishes[0],
+        7: fishes[8],
+        8: fishes[0]
+    }
 
 
 file = open('data/day6.txt', 'r')
-fishes = []
 for line in file.readlines():
     allValues = line.rstrip("\n").split(",")
     for f in allValues:
-        fishes.append(Fish(int(f)))
+        addFish(int(f), fishes)
 
-for i in range(256):
-    spawnedFishes = []
-    for f in fishes:
-        newFish = f.spawn()
-        if newFish:
-            spawnedFishes.append(newFish)
-    fishes += spawnedFishes
+for _ in range(256):
+    fishes = time(fishes)
 
-print(len(fishes))
+counter = 0
+for key in fishes:
+    counter += fishes[key]
+
+print(counter)
