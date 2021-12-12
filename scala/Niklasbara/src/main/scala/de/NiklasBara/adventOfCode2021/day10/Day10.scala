@@ -12,29 +12,36 @@ object Day10 extends App {
 
   val pairs = Map(
     '(' -> ')', ')' -> '(',
-    '{' -> '}', '}' -> '{',
     '[' -> ']', ']' -> '[',
+    '{' -> '}', '}' -> '{',
     '<' -> '>', '>' -> '<',
   )
 
-  val score = Map(
+  val scorePartOne = Map(
     ')' -> 3,
-    '}' -> 1197,
     ']' -> 57,
+    '}' -> 1197,
     '>' -> 25137,
   )
 
-  println("part1:", lines.map(part1).groupMapReduce(identity)(identity)(_ + _).values.sum)
+  val scorePartTwo = Map(
+    '(' -> 1L,
+    '[' -> 2L,
+    '{' -> 3L,
+    '<' -> 4L,
+  )
 
+  println("part1:", lines.map(syntaxErrorScore).groupMapReduce(identity)(identity)(_ + _).values.sum)
+  println("part2:", lines.zipMap(syntaxErrorScore)(autoCompleteScore).filter(_._1 == 0).map(_._2).sorted.middle)
 
-  private def part1(line: String) = {
+  private def syntaxErrorScore(line: String) = {
     val stack = mutable.Stack[Char]()
     line.foldLeft(0)((number, char) => {
       if (number == 0) {
         char match {
           case ')' | '}' | ']' | '>' =>
             if (stack.pop() != pairs(char)) {
-              score(char)
+              scorePartOne(char)
             } else {
               number
             }
@@ -42,16 +49,29 @@ object Day10 extends App {
             stack.push(char)
             number
         }
-      }
-      else {
+      } else {
         number
       }
-    }
-    )
+    })
   }
 
-  private def part2(line: String) = {
+  private def autoCompleteScore(line: String) = {
+    line.foldLeft(Seq[Char]())((chars, char) => {
+      char match {
+        case ')' | '}' | ']' | '>' =>
+          chars.tail
+        case _ =>
+          Seq(char).appendedAll(chars)
+      }
+    }).foldLeft(0L)((number, char) => {
+      5 * number + scorePartTwo(char)
+    })
+  }
 
+  implicit class SeqWithMiddle[T](s: Seq[T]) {
+    def middle: T = s(s.length / 2)
+
+    def zipMap[X, Y](mapFirst: Function[T, X])(mapSecond: Function[T, Y]): Seq[(X, Y)] = s.map(mapFirst).zip(s.map(mapSecond))
   }
 }
 
