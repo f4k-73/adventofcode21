@@ -6,11 +6,11 @@ object Day13 extends App {
 
   val inputs = InputReader(AdventDays.THIRTEEN, InputTypes.local).lines.filterNot(_.isEmpty)
 
-  val points: Seq[(Int, Int)] = inputs.filterNot(_.startsWith("fold along"))
+  val points: Seq[(Int, Int)] = inputs.filterNot(startsWithFoldAlong)
     .map(_.split(",").map(str => str.toInt))
     .map(arr => (arr(0), arr(1)))
 
-  val folds: Seq[(String, Int)] = inputs.filter(_.startsWith("fold along"))
+  val folds: Seq[(String, Int)] = inputs.filter(startsWithFoldAlong)
     .map(_.replace("fold along", "").trim)
     .map(_.split("="))
     .map(arr => (arr(0), arr(1).toInt))
@@ -20,14 +20,6 @@ object Day13 extends App {
   println(points.foldByInstructions(folds).toOutput)
 
   implicit class Sheet(points: Seq[(Int, Int)]) {
-
-    def fillWithString(input: Seq[Int], xSize: Int): String = Seq.fill(xSize)(SheetChars.empty)
-      .zipWithIndex
-      .map(strAndIndex => if (input.contains(strAndIndex._2)) {
-        SheetChars.point
-      } else {
-        strAndIndex._1
-      }).mkString(SheetChars.empty.toString)
 
     def toOutput: String = points.groupMap(_._2)(_._1)
       .toSeq
@@ -57,7 +49,19 @@ object Day13 extends App {
         points.filter(_._1 > x)
           .map(point => (Math.abs(x * 2 - point._1), point._2))
       ).distinct
+
+    private def fillWithString(input: Seq[Int], xSize: Int): String = Seq.fill(xSize)(SheetChars.empty)
+      .zipWithIndex
+      .map(strAndIndex => if (input.contains(strAndIndex._2)) {
+        SheetChars.point
+      } else {
+        strAndIndex._1
+      }).mkString(SheetChars.empty.toString)
+
   }
+
+  private def startsWithFoldAlong (str: String) = str.startsWith("fold along")
+
 }
 
 object SheetChars extends Enumeration {
