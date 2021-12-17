@@ -13,8 +13,24 @@ object Day11 extends App {
 
   var res = inputs.simulateSteps(100)
   println("part1: ", flashes)
+  println("part2: ", inputs.simulateUntilSynchronized)
 
   implicit class Better2dInts(s: Seq[Seq[Int]]) {
+
+    def simulateUntilSynchronized: Int = {
+      var count = 0
+      var copy = s
+      while(!copy.isSynchronized){
+        copy = copy.simulateStep
+        count += 1
+      }
+      count
+    }
+
+    def isSynchronized: Boolean = {
+      s.flatten.toSet.size == 1
+    }
+
 
     def get(y: Int, x: Int): Int = {
       if (x < 0 || y < 0) {
