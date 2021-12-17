@@ -19,7 +19,7 @@ object AdventDays extends Enumeration {
   val TWELVE: input.AdventDays.Value = AdventDays.Value("12")
   val THIRTEEN: input.AdventDays.Value = AdventDays.Value("13")
   val FOURTEEN: input.AdventDays.Value = AdventDays.Value("14")
-  val FIVETEEN: input.AdventDays.Value = AdventDays.Value("15")
+  val FIFTEEN: input.AdventDays.Value = AdventDays.Value("15")
   val SIXTEEN: input.AdventDays.Value = AdventDays.Value("16")
   val SEVENTEEN: input.AdventDays.Value = AdventDays.Value("17")
   val EIGHTTEEN: input.AdventDays.Value = AdventDays.Value("18")
