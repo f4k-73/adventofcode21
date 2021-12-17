@@ -3,30 +3,24 @@ package de.NiklasBara.adventOfCode2021.day17
 import de.NiklasBara.adventOfCode2021.input.{AdventDays, InputReader, InputTypes}
 
 object Day17 extends App {
-
   val target = InputReader(AdventDays.SEVENTEEN, InputTypes.local).lines.head.parseToTarget
 
   val startCoord = Point(0, 0)
 
-
-  val options: Seq[Point] = {
-    (0 until target.maxX).flatMap(x => {
-      (target.minY until -target.minY).map(y => {
+  val options: Seq[Probe] = {
+    (0 to target.maxX).flatMap(x => {
+      (target.minY to -target.minY).map(y => {
         Point(y, x)
       })
     })
-  }
+  }.map(Probe(startCoord, _))
 
-  var foo = options.map(Probe(startCoord, _))
 
-  println(foo.size)
-
-  val maxY = options.map(Probe(startCoord, _)).filter(_.doesHit(target)).flatMap(_.allCoordinatesUntilHitOrMiss(target)).maxBy(_.y).y
-
-  println(maxY)
+  println("part1:", options.flatMap(_.allCoordinatesUntilHitOrMiss(target)).maxBy(_.y).y)
+  println("part2:", options.count(_.doesHit(target)))
 
   case class Target(minX: Int, maxX: Int, minY: Int, maxY: Int) {
-    def missed(point: Point): Boolean = point.x > maxX || point.y < maxY
+    def missed(point: Point): Boolean = point.x > maxX || point.y < minY
 
     def hit(point: Point): Boolean = within(point.x, minX, maxX) && within(point.y, minY, maxY)
 
@@ -36,22 +30,17 @@ object Day17 extends App {
   case class Probe(coordinates: Point, velocity: Point) {
     def next: Probe = Probe(coordinates + velocity, nextVelocity)
 
-    def allCoordinatesUntilHitOrMiss(target: Target): Seq[Point] = {
+    def allCoordinatesUntilHitOrMiss(target: Target): Seq[Point] =
       if (target.hit(this.coordinates) || target.missed(this.coordinates)) {
         Seq(this.coordinates)
       } else {
         this.next.allCoordinatesUntilHitOrMiss(target).appended(this.coordinates)
       }
-    }
 
-    def doesHit(target: Target): Boolean = {
-      if (target.hit(this.coordinates)) {
-        true
-      } else if (target.missed(this.coordinates)) {
-        false
-      } else {
-        this.next.doesHit(target)
-      }
+    def doesHit(target: Target): Boolean = if (target.hit(allCoordinatesUntilHitOrMiss(target).head)) {
+      true
+    } else {
+      false
     }
 
     private def nextXVelocity: Int = if (velocity.x < 0) {
@@ -62,8 +51,7 @@ object Day17 extends App {
       0
     }
 
-    private def nextVelocity: Point = Point(velocity.y - 1, nextXVelocity)
-
+    private def nextVelocity: Point = Point(velocity.y - 1, this.velocity.x + nextXVelocity)
   }
 
   case class Point(y: Int, x: Int) {
@@ -81,3 +69,6 @@ object Day17 extends App {
     }
   }
 }
+
+
+
